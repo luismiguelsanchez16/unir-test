@@ -1,3 +1,5 @@
+import math
+
 import app
 
 
@@ -30,11 +32,30 @@ class Calculator:
 
     def power(self, x, y):
         self.check_types(x, y)
-        return x ** y
+        try:
+            return math.pow(x, y)
+        except (ValueError, OverflowError) as error:
+            raise TypeError(f"Power {x}^{y} cannot be calculated") from error
 
-    def check_types(self, x, y):
-        if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
-            raise TypeError("Parameters must be numbers")
+    def sqrt(self, x):
+        self.check_types(x)
+        if x < 0:
+            raise TypeError("Square root of a negative number is not possible")
+
+        return math.sqrt(x)
+
+    def log10(self, x):
+        self.check_types(x)
+        if x <= 0:
+            raise TypeError("Logarithm is only defined for numbers greater than zero")
+
+        return math.log10(x)
+
+    @staticmethod
+    def check_types(*values):
+        for value in values:
+            if isinstance(value, bool) or not isinstance(value, (int, float)):
+                raise TypeError("Parameters must be numbers")
 
 
 if __name__ == "__main__":  # pragma: no cover
